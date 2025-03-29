@@ -1,0 +1,16 @@
+<div class="search-container">
+  <input 
+    type="text" 
+    [(ngModel)]="searchTerm" 
+    (keyup.enter)="onSearch()"
+    placeholder="Search country name..." 
+    class="search-input"
+  />
+  
+  <button 
+    class="search-button"
+    (click)="onSearch()"
+  >
+    <i class="pi pi-search"></i>
+  </button>
+</div>
