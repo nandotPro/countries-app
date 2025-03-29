@@ -1,0 +1,67 @@
+<div class="country-detail-container">
+  <button 
+    class="back-button" 
+    routerLink="/"
+  >
+    <i class="pi pi-arrow-left"></i> Back
+  </button>
+  
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner></p-progressSpinner>
+    <p>Loading country details...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-message">
+    <p>Error loading country details.</p>
+    <button class="retry-button" (click)="loadCountry()">
+      <i class="pi pi-refresh"></i> Retry
+    </button>
+  </div>
+  
+  <div *ngIf="country && !loading" class="country-card">
+    <div class="flag-and-name">
+      <img [src]="country.flags.svg" [alt]="country.name.common + ' flag'" class="country-flag"/>
+      <div class="country-title">
+        <h1>{{ country.name.common }}</h1>
+        <p class="official-name">{{ country.name.official }}</p>
+      </div>
+    </div>
+    
+    <div class="country-details">
+      <div class="detail-item" *ngIf="country.capital && country.capital.length > 0">
+        <span class="detail-label">Capital:</span>
+        <span class="detail-value">{{ country.capital?.join(', ') }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">Region:</span>
+        <span class="detail-value">{{ country.region }}</span>
+      </div>
+      
+      <div class="detail-item" *ngIf="country.subregion">
+        <span class="detail-label">Subregion:</span>
+        <span class="detail-value">{{ country.subregion }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">Population:</span>
+        <span class="detail-value">{{ country.population.toLocaleString() }}</span>
+      </div>
+      
+      <div class="detail-item">
+        <span class="detail-label">Area:</span>
+        <span class="detail-value">{{ country.area.toLocaleString() }} km²</span>
+      </div>
+      
+      <div class="detail-item" *ngIf="country.languages">
+        <span class="detail-label">Languages:</span>
+        <span class="detail-value">{{ getLanguages() }}</span>
+      </div>
+      
+      <div class="detail-item" *ngIf="country.currencies">
+        <span class="detail-label">Currencies:</span>
+        <span class="detail-value">{{ getCurrencies() }}</span>
+      </div>
+    </div>
+  </div>
+</div>

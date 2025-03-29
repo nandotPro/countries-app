@@ -1,0 +1,138 @@
+:host {
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.country-detail-container {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  padding: 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.back-button {
+  align-self: flex-start;
+  background-color: #252526;
+  color: #e0e0e0;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #3e3e3e;
+  }
+}
+
+.loading-container, .error-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.retry-button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.country-card {
+  background-color: #252526;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  max-width: 600px;
+  margin: 0 auto;
+  width: fit-content;
+  min-width: 320px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.flag-and-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  
+  .country-flag {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1.5rem;
+    border: 2px solid #3e3e3e;
+  }
+  
+  .country-title {
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #ffffff;
+    }
+    
+    .official-name {
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      font-style: italic;
+    }
+  }
+}
+
+.country-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  align-items: center;
+}
+
+.detail-label {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.detail-value {
+  color: #a0a0a0;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .country-card {
+    padding: 1rem;
+  }
+  
+  .flag-and-name {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    
+    .country-flag {
+      margin-right: 0;
+    }
+  }
+}
