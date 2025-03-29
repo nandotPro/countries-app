@@ -44,7 +44,28 @@ export class CountryListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Recupera o estado da paginação do localStorage
+    this.restorePaginationState();
     this.loadCountries();
+  }
+
+  // Salva o estado atual da paginação
+  savePaginationState(): void {
+    const paginationState = {
+      currentPage: this.currentPage,
+      first: this.first
+    };
+    localStorage.setItem('paginationState', JSON.stringify(paginationState));
+  }
+
+  // Restaura o estado da paginação
+  restorePaginationState(): void {
+    const savedState = localStorage.getItem('paginationState');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      this.currentPage = state.currentPage;
+      this.first = state.first;
+    }
   }
 
   loadCountries(): void {
@@ -103,6 +124,7 @@ export class CountryListComponent implements OnInit {
       this.first += this.rows;
       this.currentPage++;
       this.updateDisplayedCountries();
+      this.savePaginationState(); // Salva o estado após mudar de página
     }
   }
 
@@ -111,6 +133,7 @@ export class CountryListComponent implements OnInit {
       this.first -= this.rows;
       this.currentPage--;
       this.updateDisplayedCountries();
+      this.savePaginationState(); // Salva o estado após mudar de página
     }
   }
 
@@ -127,5 +150,10 @@ export class CountryListComponent implements OnInit {
 
   updateDisplayedCountries(): void {
     this.paginate(this.first, this.rows);
+  }
+
+  // Adicionar método para quando clicar em um país
+  onCountryClick(): void {
+    this.savePaginationState(); // Salva o estado antes de navegar para os detalhes
   }
 }
