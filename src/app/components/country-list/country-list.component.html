@@ -1,0 +1,67 @@
+<div class="country-list-container">
+  <h1>Country Explorer</h1>
+  
+  <app-search-bar 
+    (search)="onSearch($event)"
+  ></app-search-bar>
+  
+  <div *ngIf="loading" class="loading-container">
+    <p-progressSpinner [style]="{'width': '40px', 'height': '40px'}"></p-progressSpinner>
+    <p>Loading countries...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-message">
+    <p>Error loading countries. Please try again.</p>
+    <button pButton icon="pi pi-refresh" (click)="loadCountries()"></button>
+  </div>
+  
+  <div *ngIf="!loading && !error" class="content-area">
+    <div *ngIf="countries.length === 0" class="no-results">
+      <p>No countries found. Try another search.</p>
+    </div>
+    
+    <div *ngIf="countries.length > 0" class="country-grid">
+      <div *ngFor="let country of countries" class="country-card">
+        <div class="card-content">
+          <div class="country-info-container">
+            <h3 class="card-title">{{ country.name.common }}</h3>
+            <div class="country-info">
+              <p><strong>Region:</strong> {{ country.region }}</p>
+              <p><strong>Capital:</strong> {{ country.capital?.join(', ') || 'N/A' }}</p>
+              <p><strong>Pop:</strong> {{ (country.population / 1000000).toFixed(1) }}M</p>
+            </div>
+          </div>
+          <div class="flag-container-wrapper">
+            <div class="flag-container">
+              <img [src]="country.flags.png" [alt]="country.name.common + ' flag'" />
+            </div>
+            <button 
+              class="detail-button" 
+              [routerLink]="['/country', country.cca3]"
+            >
+              <i class="pi pi-info-circle"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && !error && countries.length > 0" class="pagination-container">
+    <div class="simple-paginator">
+      <button 
+        class="paginator-button" 
+        [disabled]="currentPage === 0"
+        (click)="prevPage()">
+        <i class="pi pi-angle-left"></i>
+      </button>
+      <span class="page-indicator">{{ currentPage + 1 }}</span>
+      <button 
+        class="paginator-button" 
+        [disabled]="first + rows >= totalRecords"
+        (click)="nextPage()">
+        <i class="pi pi-angle-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
