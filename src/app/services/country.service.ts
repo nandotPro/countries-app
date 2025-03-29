@@ -15,16 +15,15 @@ export class CountryService {
     return this.http.get<Country[]>(`${this.apiUrl}/all?fields=name,flags,population,region,capital,cca3`);
   }
 
-  getCountryByCode(code: string): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.apiUrl}/alpha/${code}`);
-  }
-
   getCountryByName(name: string): Observable<Country[]> {
     return this.http.get<Country[]>(`${this.apiUrl}/name/${name}`);
   }
 
-  getCountriesByCodes(codes: string[]): Observable<Country[]> {
-    const codesParam = codes.join(',');
-    return this.http.get<Country[]>(`${this.apiUrl}/alpha?codes=${codesParam}`);
+  getCountriesByRegion(region: string): Observable<Country[]> {
+    return this.http.get<Country[]>(`${this.apiUrl}/region/${region}`);
+  }
+
+  getCountryByCode(code: string): Observable<Country[]> {
+    return this.http.get<Country[]>(`${this.apiUrl}/alpha/${code}`);
   }
 }
