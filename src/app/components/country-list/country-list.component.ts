@@ -38,16 +38,16 @@ export class CountryListComponent implements OnInit {
   
   // Pagination
   first: number = 0;
-  rows: number = 9; // 9 items per page
+  rows: number = 9; // items per page
   totalRecords: number = 0;
   currentPage: number = 0;
   searchTerm: string = '';
   regions: { label: string, value: string }[] = [
-    { label: 'Todas as regiões', value: '' },
-    { label: 'África', value: 'Africa' },
-    { label: 'Américas', value: 'Americas' },
-    { label: 'Ásia', value: 'Asia' },
-    { label: 'Europa', value: 'Europe' },
+    { label: 'All regions', value: '' },
+    { label: 'Africa', value: 'Africa' },
+    { label: 'Americas', value: 'Americas' },
+    { label: 'Asia', value: 'Asia' },
+    { label: 'Europe', value: 'Europe' },
     { label: 'Oceania', value: 'Oceania' }
   ];
   selectedRegion: string = '';
@@ -81,6 +81,7 @@ export class CountryListComponent implements OnInit {
     }
   }
 
+  // Loads all countries from the API using RxJS operators
   loadCountries(): void {
     this.loading = true;
     this.error = false;
@@ -102,6 +103,7 @@ export class CountryListComponent implements OnInit {
       });
   }
 
+  // Handles search input from search bar
   onSearch(term: string): void {
     this.searchTerm = term;
     this.currentPage = 0;
@@ -109,6 +111,7 @@ export class CountryListComponent implements OnInit {
     this.applyFilters();
   }
 
+  // Handles region dropdown selection
   onRegionChange(event: any): void {
     this.selectedRegion = event.value;
     this.first = 0;
@@ -116,6 +119,8 @@ export class CountryListComponent implements OnInit {
     this.applyFilters();
   }
 
+
+  // Applies search and region filters to countries list
   applyFilters(): void {
     let filtered = [...this.allCountries];
     

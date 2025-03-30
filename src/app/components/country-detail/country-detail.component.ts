@@ -38,7 +38,7 @@ export class CountryDetailComponent implements OnInit {
     this.loading = true;
     this.error = false;
     
-    // Pegar o código do país da rota
+    // Get country code from route
     const countryCode = this.route.snapshot.paramMap.get('id');
     
     if (!countryCode) {
@@ -47,11 +47,11 @@ export class CountryDetailComponent implements OnInit {
       return;
     }
     
-    // Usar o método correto para buscar por código
+    // Fetch country using RxJS operators for error handling
     this.countryService.getCountryByCode(countryCode)
       .pipe(
         catchError(error => {
-          console.error('Erro ao carregar país:', error);
+          console.error('Error loading country:', error);
           this.error = true;
           return of([]);
         }),
@@ -62,18 +62,20 @@ export class CountryDetailComponent implements OnInit {
       .subscribe(countries => {
         if (countries && countries.length > 0) {
           this.country = countries[0];
-          console.log('País carregado:', this.country);
         } else {
           this.error = true;
         }
       });
   }
 
+  // Formats languages 
   getLanguages(): string {
     if (!this.country?.languages) return 'N/A';
     return Object.values(this.country.languages).join(', ');
   }
 
+
+  // Formats currencies 
   getCurrencies(): string {
     if (!this.country?.currencies) return 'N/A';
     return Object.values(this.country.currencies)
