@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Country } from '../../models/country.model';
 import { CountryService } from '../../services/country.service';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs';
 import { of } from 'rxjs';
 
 @Component({
@@ -50,7 +50,7 @@ export class CountryDetailComponent implements OnInit {
     // Fetch country using RxJS operators for error handling
     this.countryService.getCountryByCode(countryCode)
       .pipe(
-        catchError(error => {
+        catchError((error: any) => {
           console.error('Error loading country:', error);
           this.error = true;
           return of([]);
@@ -59,7 +59,7 @@ export class CountryDetailComponent implements OnInit {
           this.loading = false;
         })
       )
-      .subscribe(countries => {
+      .subscribe((countries: any[]) => {
         if (countries && countries.length > 0) {
           this.country = countries[0];
         } else {
