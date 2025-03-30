@@ -41,3 +41,7 @@ A aplicação estará disponível em `http://localhost:4200/`.
 ## API
 
 Este projeto utiliza a API RestCountries v3.1 (https://restcountries.com/).
+
+## Demonstração
+
+![Demonstração da aplicação](img/c1.png)
