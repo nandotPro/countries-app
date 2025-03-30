@@ -1,9 +1,23 @@
 <div class="country-list-container">
   <h1>Country Explorer</h1>
   
-  <app-search-bar 
-    (search)="onSearch($event)"
-  ></app-search-bar>
+  <div class="filters-row">
+    <app-search-bar 
+      (search)="onSearch($event)"
+    ></app-search-bar>
+    
+    <div class="region-filter">
+      <p-dropdown 
+        [options]="regions" 
+        [(ngModel)]="selectedRegion" 
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione uma região" 
+        [showClear]="false"
+        (onChange)="onRegionChange($event)"
+      ></p-dropdown>
+    </div>
+  </div>
   
   <div *ngIf="loading" class="loading-container">
     <p-progressSpinner [style]="{'width': '40px', 'height': '40px'}"></p-progressSpinner>

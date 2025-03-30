@@ -10,6 +10,8 @@ import { CountryService } from '../../services/country.service';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-country-list',
@@ -21,7 +23,9 @@ import { of } from 'rxjs';
     ButtonModule, 
     PaginatorModule, 
     ProgressSpinnerModule,
-    SearchBarComponent
+    SearchBarComponent,
+    DropdownModule,
+    FormsModule
   ],
   templateUrl: './country-list.component.html',
   styleUrl: './country-list.component.scss'
@@ -38,18 +42,27 @@ export class CountryListComponent implements OnInit {
   totalRecords: number = 0;
   currentPage: number = 0;
   searchTerm: string = '';
+  regions: { label: string, value: string }[] = [
+    { label: 'Todas as regiões', value: '' },
+    { label: 'África', value: 'Africa' },
+    { label: 'Américas', value: 'Americas' },
+    { label: 'Ásia', value: 'Asia' },
+    { label: 'Europa', value: 'Europe' },
+    { label: 'Oceania', value: 'Oceania' }
+  ];
+  selectedRegion: string = '';
 
   constructor(
     private countryService: CountryService
   ) {}
 
   ngOnInit(): void {
-    // Recupera o estado da paginação do localStorage
+    // Restore the pagination state from localStorage
     this.restorePaginationState();
     this.loadCountries();
   }
 
-  // Salva o estado atual da paginação
+  // Save the current pagination state
   savePaginationState(): void {
     const paginationState = {
       currentPage: this.currentPage,
@@ -58,7 +71,7 @@ export class CountryListComponent implements OnInit {
     localStorage.setItem('paginationState', JSON.stringify(paginationState));
   }
 
-  // Restaura o estado da paginação
+  // Restore the pagination state
   restorePaginationState(): void {
     const savedState = localStorage.getItem('paginationState');
     if (savedState) {
@@ -85,14 +98,7 @@ export class CountryListComponent implements OnInit {
       )
       .subscribe(countries => {
         this.allCountries = countries;
-        this.totalRecords = countries.length;
-        
-        
-        if (this.searchTerm) {
-          this.filterCountries(this.searchTerm);
-        } else {
-          this.paginate(this.first, this.rows);
-        }
+        this.applyFilters();
       });
   }
 
@@ -100,23 +106,62 @@ export class CountryListComponent implements OnInit {
     this.searchTerm = term;
     this.currentPage = 0;
     this.first = 0;
-    this.filterCountries(term);
+    this.applyFilters();
   }
 
-  filterCountries(searchTerm?: string): void {
+  onRegionChange(event: any): void {
+    this.selectedRegion = event.value;
+    this.first = 0;
+    this.currentPage = 0;
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
     let filtered = [...this.allCountries];
     
-    // Apply search filter if provided
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
+    // Region filter
+    if (this.selectedRegion) {
+      filtered = filtered.filter(country => {
+        const matches = country.region === this.selectedRegion;
+        return matches;
+      });
+    }
+        
+    // Search filter
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
       filtered = filtered.filter(country => 
         country.name.common.toLowerCase().includes(term) ||
         country.name.official.toLowerCase().includes(term)
       );
     }
-    
+        
     this.totalRecords = filtered.length;
     this.countries = filtered.slice(this.first, this.first + this.rows);
+    this.savePaginationState();
+  }
+
+  paginate(first: number, rows: number): void {
+    let filtered = this.searchTerm || this.selectedRegion ? 
+      this.allCountries.filter(country => {
+        let matchesSearch = true;
+        let matchesRegion = true;
+        
+        if (this.searchTerm) {
+          const term = this.searchTerm.toLowerCase();
+          matchesSearch = country.name.common.toLowerCase().includes(term) ||
+                          country.name.official.toLowerCase().includes(term);
+        }
+        
+        if (this.selectedRegion) {
+          matchesRegion = country.region === this.selectedRegion;
+        }
+        
+        return matchesSearch && matchesRegion;
+      }) : 
+      this.allCountries;
+    
+    this.countries = filtered.slice(first, first + rows);
   }
 
   nextPage(): void {
@@ -124,7 +169,7 @@ export class CountryListComponent implements OnInit {
       this.first += this.rows;
       this.currentPage++;
       this.updateDisplayedCountries();
-      this.savePaginationState(); // Salva o estado após mudar de página
+      this.savePaginationState(); // Save the state after changing page
     }
   }
 
@@ -133,27 +178,15 @@ export class CountryListComponent implements OnInit {
       this.first -= this.rows;
       this.currentPage--;
       this.updateDisplayedCountries();
-      this.savePaginationState(); // Salva o estado após mudar de página
+      this.savePaginationState(); // Save the state after changing page
     }
-  }
-
-  paginate(first: number, rows: number): void {
-    let filtered = this.searchTerm ? 
-      this.allCountries.filter(country => 
-        country.name.common.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        country.name.official.toLowerCase().includes(this.searchTerm.toLowerCase())
-      ) : 
-      this.allCountries;
-    
-    this.countries = filtered.slice(first, first + rows);
   }
 
   updateDisplayedCountries(): void {
     this.paginate(this.first, this.rows);
   }
 
-  // Adicionar método para quando clicar em um país
   onCountryClick(): void {
-    this.savePaginationState(); // Salva o estado antes de navegar para os detalhes
+    this.savePaginationState(); // Save the state before navigating to details
   }
 }

@@ -177,3 +177,47 @@
     grid-template-columns: 1fr;
   }
 }
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.region-filter {
+  min-width: 200px;
+  position: relative;
+  
+  ::ng-deep {
+    .p-dropdown {
+      padding: 0.5rem;
+      gap: 1rem;
+      background-color: #252526;
+      border: 1px solid #3c3c3c;
+      border-radius: 10px;
+      
+      .p-dropdown-label {
+        color: #e0e0e0;
+        padding: 0.5rem 1rem;
+      }
+      
+      .p-dropdown-trigger {
+        color: #e0e0e0;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .region-filter {
+    width: 100%;
+  }
+}
